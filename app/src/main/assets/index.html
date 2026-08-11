@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#123C46" />
+  <title>BUTI</title>
+
+
+<style>
+    :root{
+      --navy:#123C46; --navy2:#1B5660;--legacy-navy2:#17365d; --gold:#d9a441; --teal:#2fa7a0;
+      --green:#70ad47; --red:#c00000; --bg:#eef3f8; --card:#ffffff;
+      --text:#1f2937; --muted:#64748b; --amber:#f5c451;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;padding:20px 18px 28px;position:sticky;top:0;z-index:5}
+    header h1{font-size:20px;margin:0 0 4px}
+    header p{margin:0;opacity:.8;font-size:13px}
+    main{max-width:760px;margin:auto;padding:14px 14px 90px}
+    .hero{background:linear-gradient(135deg,#dff5ec,#f8fff9);border-radius:22px;padding:22px;text-align:center;box-shadow:0 8px 24px rgba(16,37,63,.08);margin-top:-18px;border:1px solid #cfe8dc}
+    .hero small{display:block;color:#4b5563;font-weight:700;letter-spacing:.06em}
+    .hero .amount{font-size:42px;font-weight:900;color:#166534;margin:5px 0}
+    .hero .status{font-weight:700;color:#166534}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+    .card{background:var(--card);border-radius:18px;padding:16px;box-shadow:0 6px 18px rgba(16,37,63,.07)}
+    .card h3{font-size:13px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .big{font-size:24px;font-weight:850}
+    .sub{font-size:12px;color:var(--muted);margin-top:4px}
+    .wide{grid-column:1/-1}
+    .btn{border:0;border-radius:14px;padding:14px 16px;font-weight:800;font-size:16px;cursor:pointer}
+    .btn-primary{background:var(--teal);color:white;width:100%}
+    .btn-dark{background:var(--navy);color:white}
+    .btn-soft{background:#e8eef5;color:var(--navy)}
+    .btn-danger{background:#fee2e2;color:#991b1b}
+    .progress{height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+    .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:0}
+    .row{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .list{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+    .item{background:#f8fafc;border-radius:14px;padding:12px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .item strong{display:block}
+    .item small{color:var(--muted)}
+    .pill{font-size:11px;padding:5px 8px;border-radius:999px;background:#dcfce7;color:#166534;font-weight:800}
+    .tabs{position:fixed;bottom:0;left:0;right:0;background:white;display:grid;grid-template-columns:repeat(4,1fr);padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px rgba(15,23,42,.1);z-index:10}
+    .tabs button{border:0;background:transparent;padding:8px 4px;color:#64748b;font-weight:700;font-size:12px}
+    .tabs button.active{color:var(--teal)}
+    section{display:none}
+    section.active{display:block}
+    input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;background:white}
+    label{display:block;font-size:13px;font-weight:800;margin:10px 0 6px}
+    .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:flex-end;z-index:20}
+    .modal.show{display:flex}
+    .sheet{width:100%;background:white;border-radius:24px 24px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+    .sheet h2{margin:0 0 8px}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+    .warning{color:#991b1b}
+    .ok{color:#166534}
+    @media(min-width:680px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.sheet{max-width:520px;margin:auto;border-radius:24px}}
+
+    .receipt-card{border:1px solid #e2e8f0;border-radius:14px;padding:10px;margin-top:10px;background:#fff}
+    .receipt-card img{width:100%;max-height:320px;object-fit:contain;border-radius:10px;background:#f8fafc;margin-top:8px}
+    .receipt-meta{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .tabs button{font-size:12px}
+
+  
+.lang-switch{position:absolute;right:18px;top:18px;display:flex;gap:4px;background:rgba(255,255,255,.14);padding:4px;border-radius:12px}
+.lang-switch button{border:0;border-radius:9px;padding:8px 11px;font-weight:800;font-size:15px;background:transparent;color:white}
+.lang-switch button.active{background:#F4F2EC;color:#123C46}
+
+/* BUTI 1.3 readability improvements */
+body{font-size:17px}
+.card h3,.card h2{letter-spacing:.01em}
+.card .sub,.sub{font-size:16px;line-height:1.45}
+.card strong{font-size:1.04em}
+.tabs button{font-size:14px}
+button,.btn{font-size:17px}
+input,select,textarea{font-size:17px}
+header p{font-size:18px}
+
+</style>
+</head>
+<body>
+<header style="position:relative">
+  <div class="lang-switch" aria-label="Language">
+    <button id="langEN" type="button">EN</button>
+    <button id="langMT" type="button">MT</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+    <img src="icon-192.png" alt="BUTI logo" style="width:68px;height:68px;border-radius:16px;object-fit:cover;display:block">
+    <div style="font-size:34px;font-weight:800;line-height:1">BUTI</div>
+  </div>
+  <p>Know what you’ve got left.</p>
+    <div style="margin-top:6px;font-size:12px;font-weight:800;opacity:.9">VERSION 2.0 · ANDROID TEST</div>
+  <button id="installAppBtn" style="display:none;margin-top:10px;border:0;border-radius:12px;padding:10px 14px;font-weight:800;background:#fff;color:#10253f;cursor:pointer">⬇ Install App</button>
+</header>
+
+<main>
+  <section id="home" class="active">
+    <div class="hero">
+      <small>TODAY YOU CAN SAFELY SPEND</small>
+      <div id="safeSpend" class="amount">€0.00</div>
+      <div id="mainStatus" class="status">Ready to start</div>
+    </div>
+
+    <div class="grid">
+      <div class="card"><h3>Left until payday</h3><div id="remaining" class="big">€0.00</div><div id="daysRemaining" class="sub"></div></div>
+      <div class="card"><h3>Current streak</h3><div id="streak" class="big">0 days</div><div class="sub">Days within allowance</div></div>
+      <div class="card"><h3>Saved this cycle</h3><div id="savedCycle" class="big">€0.00</div><div class="sub">Target: <span id="savingsTargetHome">€0.00</span></div></div>
+<div class="card"><h3>Extra income</h3><div id="extraIncomeTotal" class="big">€0.00</div><div class="sub">Added this pay cycle</div></div>
+      <div class="card"><h3>Health score</h3><div id="health" class="big">100/100</div><div class="sub">Based on spending pace</div></div>
+
+      <div class="card wide">
+        <div class="row"><h3 style="margin:0">Pay-cycle progress</h3><strong id="cycleProgressLabel">0%</strong></div>
+        <div class="progress" style="margin-top:10px"><span id="cycleProgress"></span></div>
+      </div>
+
+      <div class="card wide">
+        <h3>Money Coach</h3>
+        <div id="coachText" style="font-weight:700;line-height:1.45">Enter your first expense to begin.</div>
+      </div>
+
+      <div class="card wide">
+        
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+  <button class="btn btn-primary" onclick="openExpense()">＋ Add Expense</button>
+  <button class="btn btn-dark" onclick="openIncome()">＋ Extra Income</button>
+</div>
+
+      </div>
+
+      <div class="card wide">
+        <div class="row"><h3 style="margin:0">Recent expenses</h3><button class="btn btn-soft" onclick="showTab('spending')">View all</button></div>
+        <div id="recentList" class="list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="spending">
+    <div class="card">
+      <div class="row"><h2 style="margin:0">Spending</h2><button class="btn btn-primary" style="width:auto" onclick="openExpense()">＋ Add</button></div>
+      <div id="allExpenses" class="list"></div>
+    </div>
+  </section>
+
+  <section id="goals">
+    <div class="card">
+      <h2>Savings Vault</h2>
+      <label>Current savings</label>
+      <input id="currentSavings" type="number" step="0.01" />
+      <label>Monthly savings goal</label>
+      <input id="savingsGoal" type="number" step="0.01" />
+      <button class="btn btn-dark" style="width:100%;margin-top:14px" onclick="saveSettings()">Save goals</button>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>Wish List</h2>
+      <div id="wishList" class="list"></div>
+      <button class="btn btn-soft" style="width:100%;margin-top:12px" onclick="addWish()">＋ Add wish</button>
+    </div>
+  </section>
+
+
+  <section id="receipts">
+    <div class="card">
+      <div class="row">
+        <h2 style="margin:0">Receipts</h2>
+        <span class="sub" id="receiptCount">0 saved</span>
+      </div>
+      <div id="receiptsList" class="list" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <section id="settings">
+    <div class="card">
+      <h2>Budget Settings</h2>
+
+      <label>Main monthly income (€)</label>
+      <input id="salary" type="number" inputmode="decimal" step="0.01" placeholder="0.00">
+
+      <div class="row" style="margin-top:18px">
+        <h3 style="margin:0">Other regular income</h3>
+        <button class="btn btn-soft" style="width:auto" onclick="addRegularIncome()">＋ Add</button>
+      </div>
+      <div id="regularIncomeList" class="list" style="margin-top:8px"></div>
+
+      <div class="row" style="margin-top:20px">
+        <h3 style="margin:0">Regular monthly expenses</h3>
+        <button class="btn btn-soft" style="width:auto" onclick="addRegularBill()">＋ Add</button>
+      </div>
+      <div id="regularBillsList" class="list" style="margin-top:8px"></div>
+      <div class="row" style="margin-top:10px">
+        <strong>Total regular expenses</strong>
+        <strong id="regularBillsTotal">€0.00</strong>
+      </div>
+
+      <label style="margin-top:20px">Pay-cycle start</label><input id="cycleStart" type="date">
+      <label>Next payday</label><input id="nextPayday" type="date">
+
+      <button class="btn btn-dark" style="width:100%;margin-top:14px" onclick="saveSettings()">Save settings</button>
+      <div class="card" style="margin-top:18px;background:#f8fafc">
+        <h3 style="margin-top:0">Beta Tools</h3>
+        <div class="sub">BUTI Version 1.0 · Your data stays on this device.</div>
+        <button class="btn btn-soft" style="width:100%;margin-top:10px" onclick="loadSampleFromSettings()">🧪 Load sample budget</button>
+        <button class="btn btn-soft" style="width:100%;margin-top:10px" onclick="openFeedback()">💡 Send feedback</button>
+        <button class="btn btn-soft" style="width:100%;margin-top:10px" onclick="showWelcomeAgain()">👋 Show welcome screen</button>
+        
+        <button class="btn btn-danger" style="width:100%;margin-top:14px" onclick="resetBUTI()">🗑 Reset BUTI</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="tabs">
+  <button id="tab-home" class="active" onclick="showTab('home')">🏠<br>Home</button>
+  <button id="tab-spending" onclick="showTab('spending')">💳<br>Spending</button>
+  <button id="tab-receipts" onclick="showTab('receipts')">🧾<br>Receipts</button>
+  <button id="tab-goals" onclick="showTab('goals')">🎯<br>Goals</button>
+  <button id="tab-settings" onclick="showTab('settings')">⚙️<br>Settings</button>
+</div>
+
+<div id="feedbackModal" class="modal">
+  <div class="sheet">
+    <h2>Beta feedback</h2>
+    <label>What were you trying to do?</label>
+    <textarea id="feedbackTrying" rows="3" style="width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px"></textarea>
+    <label>What worked or didn't work?</label>
+    <textarea id="feedbackIssue" rows="4" style="width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px"></textarea>
+    <label>What would make this better?</label>
+    <textarea id="feedbackBetter" rows="4" style="width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px"></textarea>
+    <div class="actions">
+      <button class="btn btn-soft" onclick="closeFeedback()">Cancel</button>
+      <button class="btn btn-primary" onclick="copyFeedback()">Copy feedback</button>
+    </div>
+    <div id="feedbackStatus" class="sub" style="margin-top:8px"></div>
+  </div>
+</div>
+
+
+<div id="welcomeModal" class="modal">
+  <div class="sheet">
+    <h2>Hi. I’m BUTI 👋</h2>
+    <p style="line-height:1.5;margin-top:6px">Tell me what comes in, what has to go out, and when payday is. I’ll handle the maths.</p>
+
+    <div class="card" style="margin-top:12px">
+      <strong>Privacy</strong>
+      <div class="sub" style="margin-top:5px">Your budget, transactions and receipt photos are stored on this device. They are not shared with the app creator.</div>
+    </div>
+
+    <div style="display:grid;gap:10px;margin-top:14px">
+      <button class="btn btn-primary" onclick="startFreshSetup()">Start with my own budget</button>
+      <button class="btn btn-soft" onclick="loadDemoData()">Try sample budget</button>
+      <button class="btn btn-soft" onclick="continueInBrowser()">Continue in browser</button>
+    </div>
+  </div>
+</div>
+
+<div id="receiptViewModal" class="modal" onclick="if(event.target===this)closeReceiptModal()">
+  <div class="sheet">
+    <div class="row">
+      <h2 style="margin:0">Receipt</h2>
+      <button class="btn btn-soft" style="width:auto" onclick="closeReceiptModal()">Close</button>
+    </div>
+    <div id="receiptViewDetails" class="sub" style="margin-top:8px"></div>
+    <img id="receiptViewImage" alt="Receipt" style="width:100%;max-height:68vh;object-fit:contain;border-radius:14px;margin-top:12px;background:#f8fafc">
+  </div>
+</div>
+
+<div id="expenseModal" class="modal">
+  <div class="sheet">
+    <h2>Add Expense</h2>
+    <label>Amount (€)</label>
+    <input id="expenseAmount" type="number" inputmode="decimal" step="0.01" placeholder="0.00">
+    <label>Category</label>
+    <select id="expenseCategory">
+      <option>Groceries</option><option>Cigarettes</option><option>Fuel</option>
+      <option>Entertainment</option><option>Takeaway</option><option>Coffee</option>
+      <option>Shopping</option><option>Other</option>
+    </select>
+    <label>Note</label>
+    <input id="expenseNote" type="text" placeholder="Optional">
+    <label>Date</label>
+    <input id="expenseDate" type="date">
+    <label>Receipt photo</label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button type="button" class="btn btn-primary" onclick="document.getElementById('expenseReceiptCamera').click()">📷 Take photo</button>
+      <button type="button" class="btn btn-soft" onclick="document.getElementById('expenseReceiptGallery').click()">🖼 Choose photo</button>
+    </div>
+    <input id="expenseReceiptCamera" type="file" accept="image/*" capture="environment" style="display:none">
+    <input id="expenseReceiptGallery" type="file" accept="image/*" style="display:none">
+    <div id="receiptPreviewWrap" style="display:none;margin-top:10px">
+      <img id="receiptPreview" alt="Receipt preview" style="width:100%;max-height:240px;object-fit:contain;border-radius:12px;border:1px solid #cbd5e1">
+      <button class="btn btn-soft" style="width:100%;margin-top:8px" onclick="clearReceiptSelection()">Remove selected receipt</button>
+    </div>
+    <div class="actions">
+      <button class="btn btn-soft" onclick="closeExpense()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveExpense()">Save Expense</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="incomeModal" class="modal">
+  <div class="sheet">
+    <h2>Add Extra Income</h2>
+    <label>Amount (€)</label>
+    <input id="incomeAmount" type="number" inputmode="decimal" step="0.01" placeholder="0.00">
+    <label>Source</label>
+    <select id="incomeSource">
+      <option>Extra work</option>
+      <option>Refund</option>
+      <option>Gift</option>
+      <option>Pension adjustment</option>
+      <option>Other</option>
+    </select>
+    <label>Note</label>
+    <input id="incomeNote" type="text" placeholder="Optional">
+    <label>Date</label>
+    <input id="incomeDate" type="date">
+    <div class="actions">
+      <button class="btn btn-soft" onclick="closeIncome()">Cancel</button>
+      <button class="btn btn-dark" onclick="saveIncome()">Save Income</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const defaults = {
+  salary:0,
+  regularIncome:[],
+  regularBills:[],
+  savingsGoal:0, currentSavings:0,
+  cycleStart:"2026-08-14", nextPayday:"2026-09-15",
+  expenses:[], extraIncome:[], wishes:[]
+};
+let data = JSON.parse(localStorage.getItem("micksMoneyCoach") || "null") || structuredClone(defaults);
+
+if(!Array.isArray(data.regularIncome)){
+  data.regularIncome=[];
+  if((+data.ukPension||0)>0) data.regularIncome.push({name:"Regular income 1",amount:+data.ukPension});
+  if((+data.mtPension||0)>0) data.regularIncome.push({name:"Regular income 2",amount:+data.mtPension});
+}
+if(!Array.isArray(data.regularBills)){
+  data.regularBills=[];
+  if((+data.regularExpenses||0)>0) data.regularBills.push({name:"Existing regular expenses",amount:+data.regularExpenses});
+}
+data.salary=+data.salary||0;
+data.savingsGoal=+data.savingsGoal||0;
+data.currentSavings=+data.currentSavings||0;
+data.expenses=Array.isArray(data.expenses)?data.expenses:[];
+data.expenses=data.expenses.map(e=>({...e,receipt:e.receipt||""}));
+data.extraIncome=Array.isArray(data.extraIncome)?data.extraIncome:[];
+data.wishes=Array.isArray(data.wishes)?data.wishes:[];
+
+function save(){localStorage.setItem("micksMoneyCoach",JSON.stringify(data));render()}
+function money(n){return new Intl.NumberFormat("en-GB",{style:"currency",currency:"EUR"}).format(Number(n)||0)}
+function daysBetween(a,b){return Math.max(1,Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000))}
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function clamp(n,min,max){return Math.max(min,Math.min(max,n))}
+
+function totals(){
+  const otherRegularIncome=(data.regularIncome||[]).reduce((s,e)=>s+(+e.amount||0),0);
+  const income=(+data.salary||0)+otherRegularIncome;
+  const regularExpenses=(data.regularBills||[]).reduce((s,e)=>s+(+e.amount||0),0);
+  const spendable=income-regularExpenses-(+data.savingsGoal||0);
+  const cycleDays=daysBetween(data.cycleStart,data.nextPayday);
+  const spent=data.expenses.reduce((s,e)=>s+(+e.amount||0),0);
+  const extraIncome=(data.extraIncome||[]).reduce((s,e)=>s+(+e.amount||0),0);
+  const remaining=spendable+extraIncome-spent;
+  const today=todayISO();
+  const elapsed=clamp(daysBetween(data.cycleStart,today),0,cycleDays);
+  const daysRemaining=Math.max(1,cycleDays-elapsed);
+  const safe=Math.max(0,remaining/daysRemaining);
+  const base=spendable/cycleDays;
+  return {income,otherRegularIncome,regularExpenses,spendable,cycleDays,spent,extraIncome,remaining,elapsed,daysRemaining,safe,base};
+}
+
+function render(){
+  setupReceiptInput();
+  renderReceipts();
+  const savingsTargetHome = document.getElementById("savingsTargetHome");
+  if (savingsTargetHome) savingsTargetHome.textContent = money(data.savingsGoal);
+
+  const t=totals();
+  document.getElementById("safeSpend").textContent=money(t.safe);
+  document.getElementById("remaining").textContent=money(t.remaining);
+  document.getElementById("daysRemaining").textContent=`${t.daysRemaining} days remaining`;
+  const progress=clamp((t.elapsed/t.cycleDays)*100,0,100);
+  document.getElementById("cycleProgress").style.width=progress+"%";
+  document.getElementById("cycleProgressLabel").textContent=Math.round(progress)+"%";
+  document.getElementById("savedCycle").textContent=money(data.savingsGoal);
+  document.getElementById("extraIncomeTotal").textContent=money(t.extraIncome);
+  const ratio=t.base>0?t.safe/t.base:1;
+  const health=Math.round(clamp(ratio*100,0,100));
+  document.getElementById("health").textContent=health+"/100";
+
+  let status="🟢 You’re on track";
+  let coach=`You can safely spend ${money(t.safe)} today and still reach payday on budget.`;
+  if(t.remaining<0){status="🔴 Over budget";coach="Pause non-essential spending. Your spending balance is below zero."}
+  else if(t.safe<t.base*.6){status="🟠 Slow down";coach=`Keep today below ${money(t.safe)} to protect the rest of the pay cycle.`}
+  else if(t.spent===0){status="Ready to begin";coach="Add every purchase, even small ones. The safe-spend figure will update automatically."}
+  document.getElementById("mainStatus").textContent=status;
+  document.getElementById("coachText").textContent=coach;
+
+  const dailyGroups={};
+  data.expenses.forEach(e=>dailyGroups[e.date]=(dailyGroups[e.date]||0)+(+e.amount||0));
+  const streakDates=Object.keys(dailyGroups).sort();
+  let streak=0;
+  streakDates.forEach(d=>{ if(dailyGroups[d]<=t.base) streak++; });
+  document.getElementById("streak").textContent=streak+" days";
+
+  const sorted=[...data.expenses].sort((a,b)=>b.date.localeCompare(a.date));
+  renderExpenseList("recentList",sorted.slice(0,5));
+  renderExpenseList("allExpenses",sorted);
+
+  document.getElementById("salary").value=data.salary;
+  document.getElementById("cycleStart").value=data.cycleStart;
+  document.getElementById("nextPayday").value=data.nextPayday;
+  document.getElementById("currentSavings").value=data.currentSavings;
+  document.getElementById("savingsGoal").value=data.savingsGoal;
+  renderRegularIncome();
+  renderRegularBills();
+
+  const wish=document.getElementById("wishList"); wish.innerHTML="";
+  data.wishes.forEach((w,i)=>{
+    const left=Math.max(0,w.cost-w.saved), months=Math.ceil(left/100);
+    const div=document.createElement("div"); div.className="item";
+    div.innerHTML=`<div><strong>${w.name}</strong><small>${money(w.saved)} of ${money(w.cost)} · about ${months} months</small></div><button class="btn btn-soft" onclick="editWish(${i})">Edit</button>`;
+    wish.appendChild(div);
+  });
+}
+
+function renderExpenseList(id,items){
+  const el=document.getElementById(id); el.innerHTML="";
+  if(!items.length){el.innerHTML='<div class="sub">No expenses entered yet.</div>';return}
+  items.forEach((e)=>{
+    const idx=data.expenses.indexOf(e);
+    const d=document.createElement("div");d.className="item";
+    const receiptButton=e.receipt
+      ? `<button class="btn btn-soft" style="padding:5px 8px;margin-top:5px" onclick="showReceiptModal(${idx})">🧾 Receipt</button>`
+      : "";
+    d.innerHTML=`<div><strong>${e.category}</strong><small>${e.date}${e.note?" · "+e.note:""}</small></div>
+      <div style="text-align:right">
+        <strong>${money(e.amount)}</strong><br>
+        ${receiptButton}
+        <button class="btn btn-soft" style="padding:5px 8px;margin-top:5px" onclick="deleteExpense(${idx})">Delete</button>
+      </div>`;
+    el.appendChild(d);
+  });
+}
+function showTab(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.getElementById("tab-"+id).classList.add("active");
+}
+function openExpense(){
+  clearReceiptSelection();
+  setupReceiptInput();document.getElementById("expenseDate").value=todayISO();document.getElementById("expenseModal").classList.add("show");setTimeout(()=>document.getElementById("expenseAmount").focus(),200)}
+function closeExpense(){document.getElementById("expenseModal").classList.remove("show")}
+
+let pendingReceiptData="";
+
+
+const BETA_VERSION="1.0";
+
+
+
+let installEventSeen=false;
+let installEventTime="";
+let swRegistrationStatus="Not checked";
+let swControllerStatus="Not checked";
+let swReadyStatus="Not checked";
+let manifestStatus="Not checked";
+
+function diagRow(label,value){
+  return `<div class="item"><div><strong>${label}</strong></div><div style="text-align:right;max-width:58%"><span>${value}</span></div></div>`;
+}
+
+async function collectInstallDiagnostics(){
+  const standalone=isStandalone() ? "Yes" : "No";
+  const ua=navigator.userAgent || "Unknown";
+  const secure=location.protocol==="https:" ? "Yes" : "No";
+  const promptReady=deferredInstallPrompt ? "Yes" : "No";
+  const seen=installEventSeen ? `Yes${installEventTime ? " · "+installEventTime : ""}` : "No";
+
+  // Service worker
+  if("serviceWorker" in navigator){
+    try{
+      const reg=await navigator.serviceWorker.getRegistration("./");
+      swRegistrationStatus=reg ? `Registered · scope ${reg.scope}` : "Not registered";
+      swControllerStatus=navigator.serviceWorker.controller ? "Yes" : "No";
+      try{
+        const readyReg=await Promise.race([
+          navigator.serviceWorker.ready,
+          new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")),2500))
+        ]);
+        swReadyStatus=readyReg ? "Yes" : "No";
+      }catch(e){
+        swReadyStatus="No / waiting";
+      }
+    }catch(e){
+      swRegistrationStatus="Error checking";
+      swControllerStatus="Unknown";
+      swReadyStatus="Unknown";
+    }
+  }else{
+    swRegistrationStatus="Not supported";
+    swControllerStatus="Not supported";
+    swReadyStatus="Not supported";
+  }
+
+  // Manifest
+  try{
+    const res=await fetch("./manifest.webmanifest",{cache:"no-store"});
+    if(res.ok){
+      const m=await res.json();
+      manifestStatus=`OK · ${m.name||"Unnamed"} · display=${m.display||"?"}`;
+    }else{
+      manifestStatus=`HTTP ${res.status}`;
+    }
+  }catch(e){
+    manifestStatus="Could not load";
+  }
+
+  const items=[
+    ["Beta version", BETA_VERSION],
+    ["HTTPS", secure],
+    ["Running as installed app", standalone],
+    ["Install prompt event seen", seen],
+    ["Native prompt ready now", promptReady],
+    ["Service worker", swRegistrationStatus],
+    ["Service worker controlling page", swControllerStatus],
+    ["Service worker ready", swReadyStatus],
+    ["Manifest", manifestStatus],
+    ["Page URL", location.href],
+    ["Browser", ua]
+  ];
+  return items;
+}
+
+async function refreshInstallDiagnostics(){
+  const el=document.getElementById("installDiagList");
+  if(!el)return;
+  el.innerHTML='<div class="sub">Checking…</div>';
+  const items=await collectInstallDiagnostics();
+  el.innerHTML=items.map(([a,b])=>diagRow(a,b)).join("");
+}
+
+function openInstallDiagnostics(){
+  document.getElementById("installDiagModal").classList.add("show");
+  refreshInstallDiagnostics();
+}
+
+function closeInstallDiagnostics(){
+  document.getElementById("installDiagModal").classList.remove("show");
+}
+
+async function copyInstallDiagnostics(){
+  const items=await collectInstallDiagnostics();
+  const text="BUTI Beta "+BETA_VERSION+" install diagnostics\n\n"+
+    items.map(([a,b])=>`${a}: ${b}`).join("\n");
+  try{
+    await navigator.clipboard.writeText(text);
+    alert("Diagnostics copied. Paste them into your message.");
+  }catch(e){
+    alert(text);
+  }
+}
+
+
+function showWelcomeAgain(){
+  document.getElementById("welcomeModal").classList.add("show");
+  setTimeout(updateInstallUI,50);
+}
+
+function startFreshSetup(){
+  localStorage.setItem("moneyCoachBetaSeen","1");
+  document.getElementById("welcomeModal").classList.remove("show");
+  showTab("settings");
+}
+
+function loadDemoData(){
+  data.salary=2400;
+  data.regularIncome=[];
+  data.regularBills=[
+    {name:"Rent / housing",amount:750},
+    {name:"Utilities",amount:150},
+    {name:"Groceries",amount:350},
+    {name:"Transport",amount:180},
+    {name:"Phone / internet",amount:75}
+  ];
+  data.savingsGoal=250;
+  data.currentSavings=0;
+  data.expenses=[
+    {amount:42.60,category:"Groceries",note:"Sample supermarket shop",date:todayISO(),receipt:""}
+  ];
+  data.extraIncome=[];
+  localStorage.setItem("moneyCoachBetaSeen","1");
+  save();
+  document.getElementById("welcomeModal").classList.remove("show");
+  showTab("home");
+}
+
+
+function loadSampleFromSettings(){
+  if(!confirm("Replace the current test data with the sample budget?")) return;
+  data.salary=2400;
+  data.regularIncome=[];
+  data.regularBills=[
+    {name:"Rent / housing",amount:750},
+    {name:"Utilities",amount:150},
+    {name:"Groceries",amount:350},
+    {name:"Transport",amount:180},
+    {name:"Phone / internet",amount:75}
+  ];
+  data.savingsGoal=250;
+  data.currentSavings=0;
+  data.expenses=[
+    {amount:42.60,category:"Groceries",note:"Sample supermarket shop",date:todayISO(),receipt:""}
+  ];
+  data.extraIncome=[];
+  save();
+  showTab("home");
+}
+
+function resetBUTI(){
+  if(!confirm("Reset BUTI? This will permanently delete the budget, transactions, receipts, goals and settings stored on this device.")) return;
+  if(!confirm("Are you sure? Tap OK to delete everything and return to the welcome screen.")) return;
+  localStorage.removeItem("micksMoneyCoach");
+  localStorage.removeItem("moneyCoachBetaSeen");
+  location.reload();
+}
+
+function resetTrialData(){
+  if(!confirm("Reset all trial data on this device?")) return;
+  localStorage.removeItem("micksMoneyCoach");
+  localStorage.removeItem("moneyCoachBetaSeen");
+  location.reload();
+}
+
+function openFeedback(){
+  document.getElementById("feedbackStatus").textContent="";
+  document.getElementById("feedbackModal").classList.add("show");
+}
+function closeFeedback(){
+  document.getElementById("feedbackModal").classList.remove("show");
+}
+async function copyFeedback(){
+  const trying=document.getElementById("feedbackTrying").value.trim();
+  const issue=document.getElementById("feedbackIssue").value.trim();
+  const better=document.getElementById("feedbackBetter").value.trim();
+  const text=`Money Coach Beta ${BETA_VERSION}
+
+What I was trying to do:
+${trying || "(blank)"}
+
+What worked / didn't work:
+${issue || "(blank)"}
+
+What would make it better:
+${better || "(blank)"}`;
+  try{
+    await navigator.clipboard.writeText(text);
+    document.getElementById("feedbackStatus").textContent="Copied. Paste this into WhatsApp, email or a message to the tester organiser.";
+  }catch(e){
+    document.getElementById("feedbackStatus").textContent=text;
+  }
+}
+
+function setupReceiptInput(){
+  const camera=document.getElementById("expenseReceiptCamera");
+  const gallery=document.getElementById("expenseReceiptGallery");
+
+  function bind(input){
+    if(!input || input.dataset.ready)return;
+    input.dataset.ready="1";
+    input.addEventListener("change",()=>{
+      const file=input.files && input.files[0];
+      if(!file){return}
+      if(file.size>6*1024*1024){
+        alert("That photo is quite large. Please choose a smaller image if possible.");
+      }
+      const reader=new FileReader();
+      reader.onload=()=>{
+        pendingReceiptData=reader.result||"";
+        const wrap=document.getElementById("receiptPreviewWrap");
+        const img=document.getElementById("receiptPreview");
+        if(img)img.src=pendingReceiptData;
+        if(wrap)wrap.style.display="block";
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  bind(camera);
+  bind(gallery);
+}
+
+function clearReceiptSelection(){
+  pendingReceiptData="";
+  const camera=document.getElementById("expenseReceiptCamera");
+  const gallery=document.getElementById("expenseReceiptGallery");
+  if(camera)camera.value="";
+  if(gallery)gallery.value="";
+  const wrap=document.getElementById("receiptPreviewWrap");
+  const img=document.getElementById("receiptPreview");
+  if(img)img.removeAttribute("src");
+  if(wrap)wrap.style.display="none";
+}
+
+function renderReceipts(){
+  const list=document.getElementById("receiptsList");
+  const count=document.getElementById("receiptCount");
+  if(!list)return;
+  const items=(data.expenses||[]).filter(e=>e.receipt);
+  if(count)count.textContent=`${items.length} saved`;
+  list.innerHTML="";
+  if(!items.length){
+    list.innerHTML='<div class="sub">No receipts saved yet. Add one when you enter an expense.</div>';
+    return;
+  }
+  items.slice().reverse().forEach(e=>{
+    const i=data.expenses.indexOf(e);
+    const d=document.createElement("div");
+    d.className="receipt-card";
+    d.innerHTML=`
+      <div class="receipt-meta">
+        <div>
+          <strong>${e.category||"Expense"}</strong>
+          <div class="sub">${e.date||""}${e.note ? " · "+e.note : ""}</div>
+        </div>
+        <strong>${money(e.amount)}</strong>
+      </div>
+      <img src="${e.receipt}" alt="Receipt">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+        <button class="btn btn-soft" onclick="openReceiptImage(${i})">View</button>
+        <button class="btn btn-soft" onclick="deleteReceiptOnly(${i})">Remove receipt</button>
+      </div>`;
+    list.appendChild(d);
+  });
+}
+
+function showReceiptModal(i){
+  const e=data.expenses[i];
+  if(!e || !e.receipt)return;
+  document.getElementById("receiptViewImage").src=e.receipt;
+  document.getElementById("receiptViewDetails").textContent=
+    `${e.date||""} · ${e.category||"Expense"} · ${money(e.amount)}${e.note ? " · "+e.note : ""}`;
+  document.getElementById("receiptViewModal").classList.add("show");
+}
+function closeReceiptModal(){
+  document.getElementById("receiptViewModal").classList.remove("show");
+  document.getElementById("receiptViewImage").removeAttribute("src");
+}
+function openReceiptImage(i){ showReceiptModal(i); }
+
+function deleteReceiptOnly(i){
+  if(confirm("Remove the receipt photo but keep the expense?")){
+    data.expenses[i].receipt="";
+    save();
+  }
+}
+
+function saveExpense(){
+  const amount=parseFloat(document.getElementById("expenseAmount").value);
+  if(!amount||amount<=0){alert("Enter a valid amount.");return}
+  data.expenses.push({amount,category:document.getElementById("expenseCategory").value,note:document.getElementById("expenseNote").value,date:document.getElementById("expenseDate").value||todayISO(),receipt:pendingReceiptData||""});
+  document.getElementById("expenseAmount").value="";document.getElementById("expenseNote").value="";
+  clearReceiptSelection();closeExpense();save();
+}
+function deleteExpense(i){if(confirm("Delete this expense?")){data.expenses.splice(i,1);save()}}
+function saveSettings(){
+  data.salary=parseFloat(document.getElementById("salary").value)||0;
+  data.savingsGoal=parseFloat(document.getElementById("savingsGoal").value)||0;
+  data.currentSavings=parseFloat(document.getElementById("currentSavings").value)||0;
+  data.cycleStart=document.getElementById("cycleStart").value;
+  data.nextPayday=document.getElementById("nextPayday").value;
+  save();alert("Saved.");
+}
+
+function renderRegularIncome(){
+  const el=document.getElementById("regularIncomeList");
+  if(!el)return;
+  el.innerHTML="";
+  if(!(data.regularIncome||[]).length){
+    el.innerHTML='<div class="sub">No other regular income added.</div>';
+    return;
+  }
+  data.regularIncome.forEach((item,i)=>{
+    const d=document.createElement("div"); d.className="item";
+    d.innerHTML=`<div><strong>${item.name}</strong><small>Monthly</small></div>
+      <div style="text-align:right"><strong>${money(item.amount)}</strong><br>
+      <button class="btn btn-soft" style="padding:5px 8px;margin-top:5px" onclick="editRegularIncome(${i})">Edit</button>
+      <button class="btn btn-soft" style="padding:5px 8px;margin-top:5px" onclick="deleteRegularIncome(${i})">Delete</button></div>`;
+    el.appendChild(d);
+  });
+}
+function addRegularIncome(){
+  const name=prompt("Income name:"); if(!name)return;
+  const amount=parseFloat(prompt("Monthly amount (€):","0"))||0;
+  data.regularIncome.push({name,amount}); save();
+}
+function editRegularIncome(i){
+  const item=data.regularIncome[i];
+  const name=prompt("Income name:",item.name); if(!name)return;
+  const amount=parseFloat(prompt("Monthly amount (€):",item.amount));
+  if(isNaN(amount))return;
+  item.name=name; item.amount=amount; save();
+}
+function deleteRegularIncome(i){
+  if(confirm("Delete this regular income?")){data.regularIncome.splice(i,1);save()}
+}
+
+function renderRegularBills(){
+  const el=document.getElementById("regularBillsList");
+  if(!el)return;
+  el.innerHTML="";
+  const total=(data.regularBills||[]).reduce((s,e)=>s+(+e.amount||0),0);
+  document.getElementById("regularBillsTotal").textContent=money(total);
+  if(!(data.regularBills||[]).length){
+    el.innerHTML='<div class="sub">No regular expenses added yet.</div>';
+    return;
+  }
+  data.regularBills.forEach((item,i)=>{
+    const d=document.createElement("div"); d.className="item";
+    d.innerHTML=`<div><strong>${item.name}</strong><small>Monthly</small></div>
+      <div style="text-align:right"><strong>${money(item.amount)}</strong><br>
+      <button class="btn btn-soft" style="padding:5px 8px;margin-top:5px" onclick="editRegularBill(${i})">Edit</button>
+      <button class="btn btn-soft" style="padding:5px 8px;margin-top:5px" onclick="deleteRegularBill(${i})">Delete</button></div>`;
+    el.appendChild(d);
+  });
+}
+function addRegularBill(){
+  const name=prompt("Expense name:"); if(!name)return;
+  const amount=parseFloat(prompt("Monthly amount (€):","0"))||0;
+  data.regularBills.push({name,amount}); save();
+}
+function editRegularBill(i){
+  const item=data.regularBills[i];
+  const name=prompt("Expense name:",item.name); if(!name)return;
+  const amount=parseFloat(prompt("Monthly amount (€):",item.amount));
+  if(isNaN(amount))return;
+  item.name=name; item.amount=amount; save();
+}
+function deleteRegularBill(i){
+  if(confirm("Delete this regular expense?")){data.regularBills.splice(i,1);save()}
+}
+function addWish(){
+  const name=prompt("What do you want to save for?"); if(!name)return;
+  const cost=parseFloat(prompt("Target cost (€):"))||0;
+  data.wishes.push({name,cost,saved:0});save();
+}
+function editWish(i){
+  const w=data.wishes[i];
+  const saved=parseFloat(prompt(`How much have you saved for ${w.name}?`,w.saved));
+  if(!isNaN(saved)){w.saved=saved;save()}
+}
+
+function openIncome(){
+  document.getElementById("incomeDate").value=todayISO();
+  document.getElementById("incomeModal").classList.add("show");
+  setTimeout(()=>document.getElementById("incomeAmount").focus(),200);
+}
+function closeIncome(){document.getElementById("incomeModal").classList.remove("show")}
+function saveIncome(){
+  const amount=parseFloat(document.getElementById("incomeAmount").value);
+  if(!amount||amount<=0){alert("Enter a valid amount.");return}
+  if(!data.extraIncome)data.extraIncome=[];
+  data.extraIncome.push({
+    amount,
+    source:document.getElementById("incomeSource").value,
+    note:document.getElementById("incomeNote").value,
+    date:document.getElementById("incomeDate").value||todayISO()
+  });
+  document.getElementById("incomeAmount").value="";
+  document.getElementById("incomeNote").value="";
+  closeIncome();
+  save();
+}
+
+function resetAll(){if(confirm("Reset all app data?")){data=structuredClone(defaults);save()}}
+
+render();
+if(!localStorage.getItem("moneyCoachBetaSeen")){
+  setTimeout(()=>{document.getElementById("welcomeModal").classList.add("show");updateInstallUI();},150);
+}
+
+window.addEventListener("load",updateInstallUI);
+
+</script>
+
+
+
+
+<script>
+(() => {
+  const EN_TO_MT = {"Know what you’ve got left.": "Kun af kemm fadallek.", "Know what you've got left.": "Kun af kemm fadallek.", "TODAY YOU CAN SAFELY SPEND": "ILLUM TISTA’ TONFOQ BLA NKWET", "Ready to begin": "Lest biex tibda", "You’re on track": "Miexi tajjeb", "You're on track": "Miexi tajjeb", "Over budget": "Qbiżt il-baġit", "LEFT UNTIL PAYDAY": "FADAL SAL-PAGA", "CURRENT STREAK": "JIEM SEGWITI", "Days within allowance": "Jiem fil-baġit", "SAVED THIS CYCLE": "IFFRANKAJT DAN IĊ-ĊIKLU", "EXTRA INCOME": "DĦUL ADDIZZJONALI", "Added this pay cycle": "Miżjud dan iċ-ċiklu tal-paga", "HEALTH SCORE": "PUNTEĠĠ FINANZJARJU", "Based on spending pace": "Ibbażat fuq ir-rata tal-infiq", "PAY-CYCLE PROGRESS": "PROGRESS TAĊ-ĊIKLU TAL-PAGA", "Home": "Paġna Ewlenija", "Spending": "Infiq", "Receipts": "Irċevuti", "Goals": "Għanijiet", "Settings": "Issettjar", "Can I afford this?": "Nista’ naffordja dan?", "CAN I AFFORD THIS?": "NISTA’ NAFFORDJA DAN?", "Thinking of buying something? BUTI will show what it does to your payday money.": "Qed taħseb biex tixtri xi ħaġa? BUTI jurik kif se taffettwa l-flus tiegħek sal-paga.", "Check": "Iċċekkja", "Check a purchase": "Iċċekkja xirja", "Spent today": "Infiq illum", "Left for today": "Fadal għal-lum", "Daily allowance": "Baġit ta’ kuljum", "Target:": "Mira:", "days remaining": "jiem fadal", "day remaining": "jum fadal", "Recent expenses": "Spejjeż riċenti", "Recent Expenses": "Spejjeż riċenti", "Add expense": "Żid spiża", "Add Expense": "Żid Spiża", "Expense": "Spiża", "Amount": "Ammont", "Category": "Kategorija", "Note": "Nota", "Date": "Data", "Receipt photo": "Ritratt tal-irċevuta", "Take photo": "Ħu ritratt", "Choose photo": "Agħżel ritratt", "Remove selected receipt": "Neħħi l-irċevuta magħżula", "Save expense": "Issejvja l-ispiża", "Delete": "Ħassar", "Receipt": "Irċevuta", "View receipt": "Ara l-irċevuta", "No receipt": "L-ebda irċevuta", "No expenses yet": "Għad m’hemmx spejjeż", "No receipts yet": "Għad m’hemmx irċevuti", "Extra income": "Dħul addizzjonali", "Add extra income": "Żid dħul addizzjonali", "Savings goal": "Mira ta’ tfaddil", "Savings Goal": "Mira ta’ Tfaddil", "Current savings": "Tfaddil kurrenti", "Regular income": "Dħul regolari", "Regular bills": "Kontijiet regolari", "Regular Bills": "Kontijiet Regolari", "Payday": "Jum il-paga", "Pay cycle": "Ċiklu tal-paga", "Start with my own budget": "Ibda bil-baġit tiegħi", "Try sample budget": "Ipprova baġit ta’ prova", "Continue in browser": "Kompli fil-browser", "Privacy": "Privatezza", "Best experience: install BUTI": "Għall-aħjar esperjenza: installa BUTI", "Install BUTI": "Installa BUTI", "BUTI is installed": "BUTI huwa installat", "Send feedback": "Ibgħat feedback", "Show welcome screen": "Uri l-iskrin ta’ merħba", "Load sample budget": "Daħħal baġit ta’ prova", "Reset BUTI": "Irrisettja BUTI", "Beta Tools": "Għodod Beta", "Install diagnostics": "Dijanjostika tal-installazzjoni", "Refresh checks": "Erġa’ iċċekkja", "Copy diagnostics": "Ikkopja d-dijanjostika", "Close": "Agħlaq", "Welcome to BUTI": "Merħba f’BUTI", "Hi. I’m BUTI": "Ħelow. Jien BUTI", "Your budget, transactions and receipt photos are stored on this device. They are not shared with the app creator.": "Il-baġit, it-tranżazzjonijiet u r-ritratti tal-irċevuti tiegħek jinżammu fuq dan l-apparat. Ma jinqasmux mal-kreatur tal-app.", "Opens like a normal app": "Jiftaħ bħal app normali", "Quick access from your home screen": "Aċċess malajr mill-iskrin prinċipali", "Your budget stays on this device": "Il-baġit tiegħek jibqa’ fuq dan l-apparat", "Beta feedback": "Feedback tal-Beta", "What were you trying to do?": "X’kont qed tipprova tagħmel?", "What worked or didn't work?": "X’ħadem jew ma ħadimx?", "What would make this better?": "X’jista’ jagħmilha aħjar?", "Copy feedback": "Ikkopja l-feedback", "Cancel": "Ikkanċella", "Pop in an amount first.": "Daħħal ammont l-ewwel.", "I’d hold off if you can.": "Jekk tista’, aħjar tistenna ftit.", "I'd hold off if you can.": "Jekk tista’, aħjar tistenna ftit.", "You can, but it’ll squeeze things.": "Tista’, imma se jħallik ftit issikkat.", "You can, but it'll squeeze things.": "Tista’, imma se jħallik ftit issikkat.", "Yep — you can.": "Iva — tista’.", "That would put you about": "Dak iħallik madwar", "short.": "nieqes.", "You’d have about": "Ikollok madwar", "You'd have about": "Ikollok madwar", "a day until payday.": "kuljum sal-paga.", "You’d still have about": "Xorta jkollok madwar", "You'd still have about": "Xorta jkollok madwar", "Add income": "Żid dħul", "Save": "Issejvja", "Name": "Isem", "Salary": "Salarju", "Income": "Dħul", "Bills": "Kontijiet", "Groceries": "Xiri tal-ikel", "Transport": "Trasport", "Entertainment": "Divertiment", "Fuel": "Fjuwil", "Utilities": "Kontijiet tad-dar", "Other": "Oħrajn", "days": "jiem", "day": "jum", "month": "xahar", "months": "xhur", "MONEY COACH": "IL-KOWĊ TAL-FLUS", "You can safely spend €": "Tista’ tonfoq €", " today and still reach payday on budget.": " illum u xorta tasal sal-paga fil-baġit.", "Extra Income": "Dħul Addizzjonali", "RECENT EXPENSES": "SPEJJEŻ RIĊENTI", "View all": "Ara kollox", "Sample supermarket shop": "Xirja ta’ prova mis-supermarket", "See how a purchase affects your daily allowance.": "Ara kif xirja taffettwa l-baġit tiegħek ta’ kuljum.", "TODAY'S SUMMARY": "SOMMARJU TAL-LUM"};
+  const MT_TO_EN = Object.fromEntries(Object.entries(EN_TO_MT).map(([en,mt])=>[mt,en]));
+  let currentLang = localStorage.getItem('butiLanguage') || 'en';
+
+  function replaceText(text, map) {
+    let out = text;
+    const keys = Object.keys(map).sort((a,b)=>b.length-a.length);
+    for (const key of keys) {
+      out = out.split(key).join(map[key]);
+    }
+    return out;
+  }
+
+  function translateNode(node, lang) {
+    if (!node || !node.parentElement) return;
+    if (['SCRIPT','STYLE','NOSCRIPT'].includes(node.parentElement.tagName)) return;
+    const map = lang === 'mt' ? EN_TO_MT : MT_TO_EN;
+    node.nodeValue = replaceText(node.nodeValue, map);
+  }
+
+  function translateAttributes(el, lang) {
+    if (!el || !el.getAttribute) return;
+    const map = lang === 'mt' ? EN_TO_MT : MT_TO_EN;
+    for (const attr of ['placeholder','title','aria-label','value']) {
+      const v = el.getAttribute(attr);
+      if (v) el.setAttribute(attr, replaceText(v, map));
+    }
+  }
+
+  function translateTree(root, lang) {
+    const walker = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    textNodes.forEach(n => translateNode(n, lang));
+    (root || document.body).querySelectorAll?.('*').forEach(el => translateAttributes(el, lang));
+  }
+
+  function setLanguage(lang) {
+    if (!['en','mt'].includes(lang)) lang = 'en';
+    if (lang === currentLang) {
+      translateTree(document.body, lang);
+    } else {
+      // First normalize back to English, then apply requested language.
+      translateTree(document.body, 'en');
+      if (lang === 'mt') translateTree(document.body, 'mt');
+      currentLang = lang;
+    }
+    document.documentElement.lang = lang === 'mt' ? 'mt' : 'en-GB';
+    localStorage.setItem('butiLanguage', lang);
+    document.getElementById('langEN')?.classList.toggle('active', lang==='en');
+    document.getElementById('langMT')?.classList.toggle('active', lang==='mt');
+  }
+
+  window.BUTI_setLanguage = setLanguage;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    currentLang = localStorage.getItem('butiLanguage') || 'en';
+    setLanguage(currentLang);
+    document.getElementById('langEN')?.addEventListener('click',()=>setLanguage('en'));
+    document.getElementById('langMT')?.addEventListener('click',()=>setLanguage('mt'));
+
+    // Watch dynamic UI updates generated by JavaScript and translate them too.
+    const observer = new MutationObserver(mutations => {
+      if (currentLang !== 'mt') return;
+      observer.disconnect();
+      for (const mutation of mutations) {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) translateNode(node, 'mt');
+          else if (node.nodeType === Node.ELEMENT_NODE) {
+            translateTree(node, 'mt');
+            translateAttributes(node, 'mt');
+          }
+        });
+        if (mutation.type === 'characterData') translateNode(mutation.target, 'mt');
+      }
+      observer.observe(document.body, {subtree:true, childList:true, characterData:true});
+    });
+    observer.observe(document.body, {subtree:true, childList:true, characterData:true});
+  });
+})();
+</script>
+
+
+
+
+
+<script id="buti-i18n-v15">
+(() => {
+  const MT = {"Know what you’ve got left.": "Kun af kemm fadallek.", "Know what you've got left.": "Kun af kemm fadallek.", "TODAY YOU CAN SAFELY SPEND": "ILLUM TISTA’ TONFOQ BLA NKWET", "Ready to begin": "Lest biex tibda", "Ready to start": "Lest biex tibda", "You’re on track": "Miexi tajjeb", "You're on track": "Miexi tajjeb", "Over budget": "Qbiżt il-baġit", "LEFT UNTIL PAYDAY": "FADAL SAL-PAGA", "CURRENT STREAK": "JIEM SEGWITI", "Days within allowance": "Jiem fil-baġit", "SAVED THIS CYCLE": "IFFRANKAJT DAN IĊ-ĊIKLU", "EXTRA INCOME": "DĦUL ADDIZZJONALI", "Added this pay cycle": "Miżjud dan iċ-ċiklu tal-paga", "HEALTH SCORE": "PUNTEĠĠ FINANZJARJU", "Based on spending pace": "Ibbażat fuq ir-rata tal-infiq", "PAY-CYCLE PROGRESS": "PROGRESS TAĊ-ĊIKLU TAL-PAGA", "MONEY COACH": "KOWĊ TAL-FLUS", "You can safely spend": "Tista’ tonfoq bla nkwiet", "today and still reach payday on budget.": "illum u xorta tasal sal-paga fil-baġit.", "Add Expense": "Żid Spiża", "Add expense": "Żid spiża", "Extra Income": "Dħul Addizzjonali", "RECENT EXPENSES": "SPEJJEŻ RIĊENTI", "Recent expenses": "Spejjeż riċenti", "View all": "Ara kollox", "Home": "Paġna Ewlenija", "Spending": "Infiq", "Receipts": "Irċevuti", "Goals": "Għanijiet", "Settings": "Issettjar", "Can I afford this?": "Nista’ naffordja dan?", "CAN I AFFORD THIS?": "NISTA’ NAFFORDJA DAN?", "Thinking of buying something? BUTI will show what it does to your payday money.": "Qed taħseb biex tixtri xi ħaġa? BUTI jurik kif se taffettwa l-flus tiegħek sal-paga.", "See how a purchase affects your daily allowance.": "Ara kif xirja taffettwa l-baġit tiegħek ta’ kuljum.", "€ Amount": "€ Ammont", "Check": "Iċċekkja", "Spent today": "Infiq illum", "Left for today": "Fadal għal-lum", "Daily allowance": "Baġit ta’ kuljum", "Target:": "Mira:", "days remaining": "jiem fadal", "day remaining": "jum fadal", "Groceries": "Xiri tal-ikel", "Sample supermarket shop": "Xirja ta’ prova mis-supermarket", "Delete": "Ħassar", "Savings Vault": "Kaxxa tat-Tfaddil", "Current savings": "Tfaddil kurrenti", "Monthly savings goal": "Mira ta’ tfaddil fix-xahar", "Save goals": "Issejvja l-għanijiet", "Wish List": "Lista tax-Xewqat", "Add wish": "Żid xewqa", "What do you want to save for?": "Għal xiex trid tiffranka?", "Target cost (€):": "Spiża fil-mira (€):", "Receipt": "Irċevuta", "View receipt": "Ara l-irċevuta", "No receipt": "L-ebda irċevuta", "No receipts yet": "Għad m’hemmx irċevuti", "Receipt photo": "Ritratt tal-irċevuta", "Take photo": "Ħu ritratt", "Choose photo": "Agħżel ritratt", "Remove selected receipt": "Neħħi l-irċevuta magħżula", "Budget Settings": "Issettjar tal-Baġit", "Main monthly income (€)": "Dħul ewlieni fix-xahar (€)", "Other regular income": "Dħul regolari ieħor", "Regular monthly expenses": "Spejjeż regolari fix-xahar", "Total regular expenses": "Total ta’ spejjeż regolari", "Pay-cycle start": "Bidu taċ-ċiklu tal-paga", "Next payday": "Il-paga li jmiss", "Save settings": "Issejvja l-issettjar", "No other regular income added.": "Għadu ma żdied l-ebda dħul regolari ieħor.", "No regular expenses added yet.": "Għad ma żdiedu l-ebda spejjeż regolari.", "Add": "Żid", "Regular income": "Dħul regolari", "Regular expenses": "Spejjeż regolari", "Beta Tools": "Għodod Beta", "Load sample budget": "Daħħal baġit ta’ prova", "Send feedback": "Ibgħat feedback", "Show welcome screen": "Uri l-iskrin ta’ merħba", "Install diagnostics": "Dijanjostika tal-installazzjoni", "Reset BUTI": "Irrisettja BUTI", "Hi. I’m BUTI 👋": "Ħelow. Jien BUTI 👋", "Tell me what comes in, what has to go out, and when payday is. I’ll handle the maths.": "Għidli kemm jidħol, kemm irid joħroġ, u meta titħallas. Il-kalkoli nagħmilhom jien.", "Best experience: install BUTI": "Għall-aħjar esperjenza: installa BUTI", "Opens like a normal app": "Jiftaħ bħal app normali", "Quick access from your home screen": "Aċċess malajr mill-iskrin prinċipali", "Your budget stays on this device": "Il-baġit tiegħek jibqa’ fuq dan l-apparat", "Install BUTI": "Installa BUTI", "BUTI is installed": "BUTI huwa installat", "You can open BUTI from your home screen.": "Tista’ tiftaħ BUTI mill-iskrin prinċipali tiegħek.", "Privacy": "Privatezza", "Your budget, transactions and receipt photos are stored on this device. They are not shared with the app creator.": "Il-baġit, it-tranżazzjonijiet u r-ritratti tal-irċevuti tiegħek jinżammu fuq dan l-apparat. Ma jinqasmux mal-kreatur tal-app.", "Start with my own budget": "Ibda bil-baġit tiegħi", "Try sample budget": "Ipprova baġit ta’ prova", "Continue in browser": "Kompli fil-browser", "Amount (€)": "Ammont (€)", "Category": "Kategorija", "Cigarettes": "Sigaretti", "Fuel": "Fjuwil", "Entertainment": "Divertiment", "Takeaway": "Ikel takeaway", "Coffee": "Kafè", "Shopping": "Xiri", "Other": "Oħrajn", "Note": "Nota", "Date": "Data", "Cancel": "Ikkanċella", "Save Expense": "Issejvja l-Ispejża", "Add Extra Income": "Żid Dħul Addizzjonali", "Source": "Sors", "Extra work": "Xogħol żejjed", "Refund": "Rifużjoni", "Gift": "Rigal", "Pension adjustment": "Aġġustament tal-pensjoni", "Save Income": "Issejvja d-Dħul", "Enter a valid amount.": "Daħħal ammont validu.", "This shows what your browser currently reports about BUTI installation.": "Dan juri x’qed jirrapporta l-browser tiegħek dwar l-installazzjoni ta’ BUTI.", "Refresh checks": "Erġa’ iċċekkja", "Copy diagnostics": "Ikkopja d-dijanjostika", "Beta feedback": "Feedback tal-Beta", "What were you trying to do?": "X’kont qed tipprova tagħmel?", "What worked or didn't work?": "X’ħadem jew ma ħadimx?", "What would make this better?": "X’jista’ jagħmilha aħjar?", "Copy feedback": "Ikkopja l-feedback", "Close": "Agħlaq", "Yes": "Iva", "No": "Le", "Not registered": "Mhux irreġistrat", "Not supported": "Mhux appoġġjat", "Pop in an amount first.": "Daħħal ammont l-ewwel.", "I’d hold off if you can.": "Jekk tista’, aħjar tistenna ftit.", "I'd hold off if you can.": "Jekk tista’, aħjar tistenna ftit.", "You can, but it’ll squeeze things.": "Tista’, imma se jħallik ftit issikkat.", "You can, but it'll squeeze things.": "Tista’, imma se jħallik ftit issikkat.", "Yep — you can.": "Iva — tista’.", "That would put you about": "Dak iħallik madwar", "short.": "nieqes.", "You’d have about": "Ikollok madwar", "You'd have about": "Ikollok madwar", "You’d still have about": "Xorta jkollok madwar", "You'd still have about": "Xorta jkollok madwar", "a day until payday.": "kuljum sal-paga.", "Salary": "Salarju", "Income": "Dħul", "Bills": "Kontijiet", "Name": "Isem", "Save": "Issejvja", "day": "jum", "days": "jiem", "month": "xahar", "months": "xhur"};
+  const KEYS = Object.keys(MT).sort((a,b)=>b.length-a.length);
+  let currentLang = localStorage.getItem("butiLanguage") || "en";
+  let internal = false;
+
+  function translateString(s) {
+    if (!s) return s;
+    let out = String(s);
+    for (const key of KEYS) out = out.split(key).join(MT[key]);
+    return out;
+  }
+
+  function processTextNode(node) {
+    if (!node || !node.parentElement) return;
+    if (["SCRIPT","STYLE","NOSCRIPT"].includes(node.parentElement.tagName)) return;
+    if (node.parentElement.closest("[data-no-i18n]")) return;
+    if (node.__butiEN == null) node.__butiEN = node.nodeValue;
+    node.nodeValue = currentLang === "mt" ? translateString(node.__butiEN) : node.__butiEN;
+  }
+
+  function processElement(el) {
+    if (!el || !el.getAttribute || el.closest?.("[data-no-i18n]")) return;
+    for (const attr of ["placeholder","title","aria-label"]) {
+      const key="__butiEN_"+attr;
+      if (el[key] == null) el[key] = el.getAttribute(attr);
+      if (el[key] != null) el.setAttribute(attr, currentLang==="mt" ? translateString(el[key]) : el[key]);
+    }
+  }
+
+  function processTree(root) {
+    if (!root) return;
+    internal = true;
+    try {
+      if (root.nodeType === Node.TEXT_NODE) processTextNode(root);
+      else {
+        if (root.nodeType === Node.ELEMENT_NODE) processElement(root);
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(processTextNode);
+        root.querySelectorAll?.("*").forEach(processElement);
+      }
+    } finally {
+      internal = false;
+    }
+  }
+
+  function applyLanguage(lang) {
+    currentLang = lang === "mt" ? "mt" : "en";
+    localStorage.setItem("butiLanguage", currentLang);
+    document.documentElement.lang = currentLang==="mt" ? "mt" : "en-GB";
+
+    // Reset all tracked text back to English source before applying target language.
+    internal = true;
+    try {
+      const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+      const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(n=>{ if(n.__butiEN!=null) n.nodeValue=n.__butiEN; });
+      document.body.querySelectorAll("*").forEach(el=>{
+        for(const attr of ["placeholder","title","aria-label"]) {
+          const key="__butiEN_"+attr;
+          if(el[key]!=null) el.setAttribute(attr,el[key]);
+        }
+      });
+    } finally { internal=false; }
+
+    processTree(document.body);
+    document.getElementById("langEN")?.classList.toggle("active", currentLang==="en");
+    document.getElementById("langMT")?.classList.toggle("active", currentLang==="mt");
+  }
+
+  window.BUTI_setLanguage = applyLanguage;
+
+  // Translate alert/confirm/prompt messages too.
+  const _alert=window.alert.bind(window);
+  const _confirm=window.confirm.bind(window);
+  const _prompt=window.prompt.bind(window);
+  window.alert=(msg)=>_alert(currentLang==="mt"?translateString(msg):msg);
+  window.confirm=(msg)=>_confirm(currentLang==="mt"?translateString(msg):msg);
+  window.prompt=(msg,def)=>_prompt(currentLang==="mt"?translateString(msg):msg,def);
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    document.getElementById("langEN")?.addEventListener("click",()=>applyLanguage("en"));
+    document.getElementById("langMT")?.addEventListener("click",()=>applyLanguage("mt"));
+    applyLanguage(currentLang);
+
+    const observer = new MutationObserver(mutations=>{
+      if (internal) return;
+      for (const m of mutations) {
+        if (m.type==="characterData") {
+          // New dynamic English from app logic becomes the new source.
+          m.target.__butiEN = m.target.nodeValue;
+          if (currentLang==="mt") processTextNode(m.target);
+        }
+        for (const node of m.addedNodes) {
+          if (node.nodeType===Node.TEXT_NODE) {
+            node.__butiEN=node.nodeValue;
+            if(currentLang==="mt") processTextNode(node);
+          } else if(node.nodeType===Node.ELEMENT_NODE) {
+            processTree(node);
+          }
+        }
+      }
+    });
+    observer.observe(document.body,{subtree:true,childList:true,characterData:true});
+  });
+})();
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
