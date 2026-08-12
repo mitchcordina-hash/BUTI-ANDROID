@@ -26,24 +26,22 @@ public class MainActivity extends Activity {
 public void onBackPressed() {
     webView.evaluateJavascript(
         "(function(){" +
-        "var modal=document.querySelector('.modal.show, .modal.active, .modal[style*=\"display: block\"], .modal[style*=\"display:block\"]');" +
-        "if(modal){" +
-        "modal.style.display='none';" +
-        "modal.classList.remove('show','active');" +
+        "var m=document.getElementById('expenseModal');" +
+        "if(m && m.classList.contains('show')){" +
+        "if(typeof closeExpense==='function') closeExpense();" +
         "return 'closed';" +
         "}" +
-        "var active=document.querySelector('section.active');" +
-        "if(active && active.id!=='home'){" +
-        "if(typeof showTab==='function'){showTab('home');}" +
+        "var a=document.querySelector('section.active');" +
+        "if(a && a.id!=='home'){" +
+        "if(typeof showTab==='function') showTab('home');" +
         "return 'home';" +
         "}" +
         "return 'exit';" +
         "})()",
         result -> {
-            if (result == null || "\"exit\"".equals(result)) {
+            if ("\"exit\"".equals(result)) {
                 MainActivity.super.onBackPressed();
             }
         }
-    ));
-}
+    );
 }
