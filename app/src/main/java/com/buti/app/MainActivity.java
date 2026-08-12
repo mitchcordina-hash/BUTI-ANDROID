@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class MainActivity extends Activity private WebView webView; {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+public class MainActivity extends Activity {
 
-         webView = new WebView(this);
+    WebView webView;
+
+    @Override
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
+
+        webView = new WebView(this);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.setWebViewClient(new WebViewClient());
@@ -18,24 +21,16 @@ public class MainActivity extends Activity private WebView webView; {
         webView.loadUrl("file:///android_asset/index.html");
         setContentView(webView);
     }
-@Override
-public void onBackPressed() {
-    WebView w = (WebView) ((android.view.ViewGroup)
-            findViewById(android.R.id.content)).getChildAt(0);
 
-    w.evaluateJavascript(
-            "(function(){" +
-            "var home=document.getElementById('home');" +
-            "if(home && !home.classList.contains('active')){" +
-            "showTab('home');" +
-            "return 'home';" +
-            "}" +
-            "return 'exit';" +
-            "})()",
+    @Override
+    public void onBackPressed() {
+        webView.evaluateJavascript(
+            "typeof showTab==='function' ? (showTab('home'),'home') : 'exit'",
             result -> {
-                if (result != null && result.contains("exit")) {
-                    MainActivity.super.onBackPressed();
+                if ("\"exit\"".equals(result)) {
+                    super.onBackPressed();
                 }
             }
-    );
-}}
+        );
+    }
+}
